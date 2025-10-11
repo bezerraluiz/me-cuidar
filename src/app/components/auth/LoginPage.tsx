@@ -5,9 +5,10 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
+import { MOCK_USER } from "../../data/mockData";
 
 interface LoginPageProps {
-  onLogin: (cpf: string) => void;
+  onLogin: () => void;
   onNavigateToRegister: () => void;
 }
 
@@ -53,11 +54,22 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
       return;
     }
 
+    // Validar se é o usuário mock (Regina dos Santos)
+    if (cpf !== MOCK_USER.cpf) {
+      setError("CPF não encontrado. Use o CPF: 123.456.789-00");
+      return;
+    }
+
+    if (password !== MOCK_USER.password) {
+      setError("Senha incorreta. Use a senha: regina123");
+      return;
+    }
+
     setIsLoading(true);
     // Simular login
     setTimeout(() => {
       setIsLoading(false);
-      onLogin(cpf);
+      onLogin();
     }, 1000);
   };
 
@@ -74,7 +86,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             </svg>
           </div>
           <div>
-            <h1>Saúde Preventiva</h1>
+            <h1>Bem Cuidar</h1>
             <p className="text-muted-foreground mt-2">
               Acesse sua conta para continuar
             </p>

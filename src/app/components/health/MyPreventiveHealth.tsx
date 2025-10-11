@@ -1,70 +1,19 @@
 import { CheckCircle, XCircle, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import { useState } from "react";
 import { cn } from "../ui/utils";
+import { MOCK_EXAMS } from "../../data/mockData";
 
 interface MyPreventiveHealthProps {
-  onNavigate: (page: string, data?: any) => void;
+  onNavigate: (page: string, data?: { examType?: string }) => void;
 }
 
 export function MyPreventiveHealth({ onNavigate }: MyPreventiveHealthProps) {
   const [expandedExam, setExpandedExam] = useState<number | null>(null);
 
-  // Dados mock de exames preventivos
-  const exams = [
-    {
-      id: 1,
-      name: "Mamografia",
-      status: "ok",
-      lastDone: "15/03/2025",
-      nextDue: "15/03/2026",
-      frequency: "Anual",
-      ageRecommendation: "A partir dos 40 anos",
-      details: "A mamografia é o exame de raios-X da mama que ajuda a detectar o câncer de mama precocemente. Mulheres de 40 a 74 anos devem fazer anualmente.",
-    },
-    {
-      id: 2,
-      name: "Papanicolau",
-      status: "ok",
-      lastDone: "10/05/2025",
-      nextDue: "10/05/2028",
-      frequency: "A cada 3 anos",
-      ageRecommendation: "25 a 64 anos",
-      details: "O exame Papanicolau detecta alterações nas células do colo do útero que podem levar ao câncer. Após dois exames anuais normais, pode ser feito a cada 3 anos.",
-    },
-    {
-      id: 3,
-      name: "Colonoscopia",
-      status: "overdue",
-      lastDone: null,
-      nextDue: "Recomendado agora",
-      frequency: "A cada 5-10 anos",
-      ageRecommendation: "A partir dos 50 anos",
-      details: "A colonoscopia examina o intestino grosso para detectar pólipos e câncer colorretal. É fundamental para pessoas acima de 50 anos ou com histórico familiar.",
-    },
-    {
-      id: 4,
-      name: "Densitometria Óssea",
-      status: "due-soon",
-      lastDone: "20/01/2024",
-      nextDue: "Janeiro 2026",
-      frequency: "A cada 2 anos",
-      ageRecommendation: "Mulheres pós-menopausa",
-      details: "A densitometria óssea mede a densidade dos ossos e ajuda a diagnosticar osteoporose. Recomendada para mulheres após a menopausa.",
-    },
-    {
-      id: 5,
-      name: "Exames de Sangue",
-      status: "ok",
-      lastDone: "22/08/2025",
-      nextDue: "22/08/2026",
-      frequency: "Anual",
-      ageRecommendation: "Todas as idades",
-      details: "Hemograma completo, glicemia, colesterol e outros exames de sangue ajudam a monitorar a saúde geral e detectar problemas precocemente.",
-    },
-  ];
+  // Dados mock de exames preventivos (centralizados)
+  const exams = MOCK_EXAMS;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -108,7 +57,7 @@ export function MyPreventiveHealth({ onNavigate }: MyPreventiveHealthProps) {
   return (
     <div className="space-y-6 pb-20 md:pb-6">
       <div>
-        <h1>Minha Saúde Preventiva</h1>
+        <h1>Meu Bem Cuidar</h1>
         <p className="text-muted-foreground mt-2">
           Acompanhe todos os seus exames preventivos
         </p>

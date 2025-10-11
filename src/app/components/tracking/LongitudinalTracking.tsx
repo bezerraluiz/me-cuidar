@@ -2,45 +2,45 @@ import { TrendingUp, Calendar, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Badge } from "../ui/badge";
+import { MOCK_TRACKING_DATA, MOCK_YEARLY_DATA } from "../../data/mockData";
 
 export function LongitudinalTracking() {
-  const trackingData = {
-    yearsTracking: 2,
-    totalExams: 12,
-    recommendedExams: 15,
-    completionRate: 80,
-    upcomingExams: [
-      { name: "Mamografia", date: "Março 2026" },
-      { name: "Densitometria Óssea", date: "Janeiro 2026" },
-    ],
-  };
-
-  const yearlyData = [
-    { year: 2023, exams: 4, recommended: 5 },
-    { year: 2024, exams: 5, recommended: 5 },
-    { year: 2025, exams: 3, recommended: 5 },
-  ];
+  // Dados centralizados do mockData
+  const trackingData = MOCK_TRACKING_DATA;
+  const yearlyData = MOCK_YEARLY_DATA;
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
-      {/* Celebração */}
+      {/* Celebração / Motivação */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
         <CardContent className="pt-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/20">
             <Award className="h-8 w-8 text-primary" />
           </div>
-          <h2>Parabéns! 🎉</h2>
-          <p className="text-muted-foreground mt-2">
-            Você está há {trackingData.yearsTracking} anos fazendo rastreamento preventivo!
-          </p>
-          <Badge className="mt-4 bg-primary">Mantenha o cuidado com sua saúde</Badge>
+          {trackingData.yearsTracking > 0 ? (
+            <>
+              <h2>Parabéns! 🎉</h2>
+              <p className="text-muted-foreground mt-2">
+                Você está há {trackingData.yearsTracking} {trackingData.yearsTracking === 1 ? 'ano' : 'anos'} fazendo rastreamento preventivo!
+              </p>
+              <Badge className="mt-4 bg-primary">Mantenha o cuidado com sua saúde</Badge>
+            </>
+          ) : (
+            <>
+              <h2>Comece sua jornada! 💪</h2>
+              <p className="text-muted-foreground mt-2">
+                É hora de começar a cuidar da sua saúde com os exames preventivos recomendados!
+              </p>
+              <Badge className="mt-4 bg-primary">Você pode começar agora</Badge>
+            </>
+          )}
         </CardContent>
       </Card>
 
       {/* Progresso Geral */}
       <Card>
         <CardHeader>
-          <CardTitle>Seu Progresso de Saúde Preventiva</CardTitle>
+          <CardTitle>Seu Progresso no Bem Cuidar</CardTitle>
           <CardDescription>
             Você completou {trackingData.totalExams} de {trackingData.recommendedExams} exames recomendados
           </CardDescription>
@@ -83,12 +83,19 @@ export function LongitudinalTracking() {
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {trackingData.upcomingExams.map((exam, index) => (
-            <div key={index} className="flex items-center justify-between rounded-lg bg-muted p-3">
-              <span>{exam.name}</span>
-              <span className="text-sm text-muted-foreground">{exam.date}</span>
+          {trackingData.upcomingExams.length > 0 ? (
+            trackingData.upcomingExams.map((exam, index) => (
+              <div key={index} className="flex items-center justify-between rounded-lg bg-muted p-3">
+                <span>{exam.name}</span>
+                <span className="text-sm text-muted-foreground">{exam.date}</span>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-muted-foreground py-4">
+              <p>Você ainda não tem exames agendados.</p>
+              <p className="text-sm mt-1">Agende seus exames preventivos para começar!</p>
             </div>
-          ))}
+          )}
         </CardContent>
       </Card>
 
@@ -96,19 +103,29 @@ export function LongitudinalTracking() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-success" />
+            <TrendingUp className={`h-5 w-5 ${trackingData.completionRate >= 70 ? 'text-success' : 'text-warning'}`} />
             <CardTitle>Sua Tendência de Cuidado</CardTitle>
           </div>
           <CardDescription>
-            Você está mantendo uma boa frequência de exames preventivos!
+            {trackingData.completionRate >= 70
+              ? "Você está mantendo uma boa frequência de exames preventivos!"
+              : "É importante melhorar a frequência dos seus exames preventivos."}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="rounded-lg bg-gradient-to-r from-success/10 to-primary/10 p-6 text-center">
-            <p className="text-success">
-              Tendência Positiva: Continue assim para manter sua saúde em dia! 📈
-            </p>
-          </div>
+          {trackingData.completionRate >= 70 ? (
+            <div className="rounded-lg bg-gradient-to-r from-success/10 to-primary/10 p-6 text-center">
+              <p className="text-success">
+                Tendência Positiva: Continue assim para manter sua saúde em dia! 📈
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-lg bg-gradient-to-r from-warning/10 to-primary/10 p-6 text-center">
+              <p className="text-warning">
+                Atenção: Agende seus exames preventivos para cuidar melhor da sua saúde! 📊
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
