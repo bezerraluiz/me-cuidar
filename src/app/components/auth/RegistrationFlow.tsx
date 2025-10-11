@@ -25,7 +25,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     cpf: "",
     birthDate: "",
     phone: "",
-    
+
     // Etapa 2: Endereço
     zipCode: "",
     street: "",
@@ -34,11 +34,11 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     neighborhood: "",
     city: "",
     state: "",
-    
+
     // Etapa 3: Senha
     password: "",
     confirmPassword: "",
-    
+
     // Etapa 4: Histórico de Saúde
     isSmoker: "",
     hasDiabetes: false,
@@ -46,7 +46,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     hasHeartDisease: false,
     hasObesity: false,
     otherConditions: "",
-    
+
     // Etapa 5: Histórico Familiar
     familyHistory: {
       breastCancer: false,
@@ -108,8 +108,8 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
         break;
 
       case 2:
-        if (!formData.zipCode || !formData.street || !formData.number || 
-            !formData.neighborhood || !formData.city || !formData.state) {
+        if (!formData.zipCode || !formData.street || !formData.number ||
+          !formData.neighborhood || !formData.city || !formData.state) {
           setError("Por favor, preencha todos os campos obrigatórios do endereço");
           return false;
         }
@@ -204,8 +204,8 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
           </div>
 
           {/* Indicador de Progresso */}
-          <StepIndicator 
-            currentStep={step} 
+          <StepIndicator
+            currentStep={step}
             totalSteps={6}
             stepLabels={stepLabels}
           />
@@ -275,7 +275,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 />
               </div>
 
-              <Button className="w-full h-12" onClick={handleNext}>
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
                 Continuar
               </Button>
             </CardContent>
@@ -375,7 +375,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 </div>
               </div>
 
-              <Button className="w-full h-12" onClick={handleNext}>
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
                 Continuar
               </Button>
             </CardContent>
@@ -430,7 +430,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 </ul>
               </div>
 
-              <Button className="w-full h-12" onClick={handleNext}>
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
                 Continuar
               </Button>
             </CardContent>
@@ -481,7 +481,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="diabetes"
                       checked={formData.hasDiabetes}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({ ...formData, hasDiabetes: checked as boolean })
                       }
                     />
@@ -494,7 +494,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="hypertension"
                       checked={formData.hasHypertension}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({ ...formData, hasHypertension: checked as boolean })
                       }
                     />
@@ -507,7 +507,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="heartDisease"
                       checked={formData.hasHeartDisease}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({ ...formData, hasHeartDisease: checked as boolean })
                       }
                     />
@@ -520,7 +520,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="obesity"
                       checked={formData.hasObesity}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({ ...formData, hasObesity: checked as boolean })
                       }
                     />
@@ -542,7 +542,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 />
               </div>
 
-              <Button className="w-full h-12" onClick={handleNext}>
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
                 Continuar
               </Button>
             </CardContent>
@@ -561,13 +561,13 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <Label>Marque se algum familiar teve:</Label>
-                
+
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2 rounded-lg border p-4">
                     <Checkbox
                       id="breastCancer"
                       checked={formData.familyHistory.breastCancer}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, breastCancer: checked as boolean }
@@ -583,7 +583,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="colonCancer"
                       checked={formData.familyHistory.colonCancer}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, colonCancer: checked as boolean }
@@ -599,7 +599,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="prostateCancer"
                       checked={formData.familyHistory.prostateCancer}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, prostateCancer: checked as boolean }
@@ -615,7 +615,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="lungCancer"
                       checked={formData.familyHistory.lungCancer}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, lungCancer: checked as boolean }
@@ -631,7 +631,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="skinCancer"
                       checked={formData.familyHistory.skinCancer}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, skinCancer: checked as boolean }
@@ -647,7 +647,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     <Checkbox
                       id="otherCancer"
                       checked={formData.familyHistory.other}
-                      onCheckedChange={(checked) => 
+                      onCheckedChange={(checked) =>
                         setFormData({
                           ...formData,
                           familyHistory: { ...formData.familyHistory, other: checked as boolean }
@@ -668,7 +668,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                     id="otherCancerDesc"
                     placeholder="Descreva o tipo de câncer"
                     value={formData.familyHistory.otherDescription}
-                    onChange={(e) => 
+                    onChange={(e) =>
                       setFormData({
                         ...formData,
                         familyHistory: { ...formData.familyHistory, otherDescription: e.target.value }
@@ -686,7 +686,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 </p>
               </div>
 
-              <Button className="w-full h-12" onClick={handleNext}>
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
                 Continuar
               </Button>
             </CardContent>
@@ -723,7 +723,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                 </p>
               </div>
 
-              <Button className="w-full h-14" onClick={handleComplete}>
+              <Button className="cursor-pointer w-full h-14" onClick={handleComplete}>
                 Acessar Minha Conta
               </Button>
             </CardContent>

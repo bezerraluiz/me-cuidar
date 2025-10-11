@@ -107,9 +107,8 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           {[1, 2, 3, 4, 5].map((s) => (
             <div
               key={s}
-              className={`h-2 flex-1 rounded-full ${
-                s <= step ? "bg-primary" : "bg-muted"
-              }`}
+              className={`h-2 flex-1 rounded-full ${s <= step ? "bg-primary" : "bg-muted"
+                }`}
             />
           ))}
         </div>
@@ -137,11 +136,10 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
             {exams.map((exam) => (
               <Card
                 key={exam.id}
-                className={`cursor-pointer transition-colors ${
-                  selectedExam === exam.name
-                    ? "border-primary bg-accent"
-                    : "hover:bg-accent"
-                }`}
+                className={`cursor-pointer transition-colors ${selectedExam === exam.name
+                  ? "border-primary bg-accent"
+                  : "hover:bg-accent"
+                  }`}
                 onClick={() => setSelectedExam(exam.name)}
               >
                 <CardContent className="flex items-start gap-3 p-4">
@@ -163,7 +161,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           </div>
 
           <Button
-            className="w-full h-12"
+            className="cursor-pointer w-full h-12"
             disabled={!selectedExam}
             onClick={handleNext}
           >
@@ -186,11 +184,10 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
             {clinics.map((clinic) => (
               <Card
                 key={clinic.id}
-                className={`cursor-pointer transition-colors ${
-                  selectedClinic?.id === clinic.id
-                    ? "border-primary bg-accent"
-                    : "hover:bg-accent"
-                }`}
+                className={`cursor-pointer transition-colors ${selectedClinic?.id === clinic.id
+                  ? "border-primary bg-accent"
+                  : "hover:bg-accent"
+                  }`}
                 onClick={() => setSelectedClinic(clinic)}
               >
                 <CardContent className="p-4 space-y-3">
@@ -216,7 +213,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           </div>
 
           <Button
-            className="w-full h-12"
+            className="cursor-pointer w-full h-12"
             disabled={!selectedClinic}
             onClick={handleNext}
           >
@@ -236,7 +233,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           </div>
 
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-4 cursor-pointer">
               <CalendarComponent
                 mode="single"
                 selected={selectedDate}
@@ -252,11 +249,11 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
               <div>
                 <h3>Horários Disponíveis</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {selectedDate.toLocaleDateString('pt-BR', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  {selectedDate.toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </p>
               </div>
@@ -266,7 +263,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
                   <Button
                     key={time}
                     variant={selectedTime === time ? "default" : "outline"}
-                    className="h-12"
+                    className="cursor-pointer h-12"
                     onClick={() => setSelectedTime(time)}
                   >
                     {time}
@@ -277,7 +274,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           )}
 
           <Button
-            className="w-full h-12"
+            className="cursor-pointer w-full h-12"
             disabled={!selectedDate || !selectedTime}
             onClick={handleNext}
           >
@@ -350,7 +347,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           </div>
 
           <Button
-            className="w-full h-12"
+            className="cursor-pointer w-full h-12"
             onClick={handleNext}
           >
             Continuar
@@ -411,20 +408,11 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
                   </ul>
                 </div>
               </div>
-
-              <div className="flex justify-center pt-4">
-                <div className="flex h-32 w-32 items-center justify-center rounded-lg bg-muted">
-                  <QrCode className="h-20 w-20 text-muted-foreground" />
-                </div>
-              </div>
-              <p className="text-center text-sm text-muted-foreground">
-                Código QR gerado após confirmação
-              </p>
             </CardContent>
           </Card>
 
           <Button
-            className="w-full h-14"
+            className="cursor-pointer w-full h-14"
             onClick={handleConfirm}
           >
             Confirmar Agendamento

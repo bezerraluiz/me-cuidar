@@ -48,15 +48,15 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
               <span className="text-primary-foreground">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
-                  <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2"/>
-                  <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" />
+                  <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" />
+                  <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" />
                 </svg>
               </span>
             </div>
             <span>Bem Cuidar</span>
           </div>
-          
+
           <Button
             variant="ghost"
             size="icon"
@@ -71,13 +71,13 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPage === item.id;
-            
+
             return (
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
                 className={cn(
-                  "flex w-full items-center gap-3 rounded-lg px-3 py-3 transition-colors",
+                  "cursor-pointer flex w-full items-center gap-3 rounded-lg px-3 py-3 transition-colors",
                   isActive
                     ? "bg-sidebar-accent text-sidebar-accent-foreground"
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50"

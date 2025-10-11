@@ -10,24 +10,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { MOCK_EXAMS } from "../../data/mockData";
 
 interface ProactiveAlertsProps {
-  onNavigate: (page: string, data?: { examType?: string }) => void;
+  onNavigate: (page: string, data?: any) => void;
 }
 
 export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
-  // Dados mock de alertas baseados em idade e histórico (centralizados)
-  const alerts = MOCK_EXAMS.map(exam => ({
-    id: exam.id,
-    type: exam.priority === "urgent" ? "urgent" : exam.priority === "high" ? "warning" : "info",
-    exam: exam.name,
-    reason: exam.ageRecommendation,
-    status: exam.status,
-    lastDone: exam.lastDone,
-    nextDue: exam.nextDue,
-    description: exam.details,
-  }));
+  // Dados mock de alertas baseados em idade e histórico
+  const alerts = [
+    {
+      id: 1,
+      type: "urgent",
+      exam: "Colonoscopia",
+      reason: "Recomendado para pessoas acima de 50 anos",
+      status: "overdue",
+      lastDone: null,
+      nextDue: "Agora",
+      description: "A colonoscopia é importante para detectar precocemente câncer de intestino. Esse exame deve ser feito a partir dos 50 anos e repetido a cada 5-10 anos.",
+    },
+    {
+      id: 2,
+      type: "warning",
+      exam: "Mamografia",
+      reason: "Exame anual recomendado",
+      status: "due-soon",
+      lastDone: "15/03/2024",
+      nextDue: "Março 2025",
+      description: "A mamografia é o principal exame para detectar precocemente o câncer de mama. Mulheres acima de 40 anos devem fazer anualmente.",
+    },
+    {
+      id: 3,
+      type: "info",
+      exam: "Exame de Sangue Completo",
+      reason: "Check-up anual",
+      status: "ok",
+      lastDone: "22/08/2025",
+      nextDue: "Agosto 2026",
+      description: "O hemograma completo ajuda a identificar diversas condições de saúde e deve ser feito anualmente.",
+    },
+  ];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -58,57 +79,23 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
   return (
     <div className="space-y-6 pb-20 md:pb-6">
       <div>
-        <h1>Seu Bem Cuidar</h1>
+        <h1>Sua Saúde Preventiva</h1>
         <p className="text-muted-foreground mt-2">
           Acompanhe os exames recomendados para você
         </p>
       </div>
 
-      {/* Resumo */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-destructive">
-                {alerts.filter(a => a.status === "overdue").length}
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">Atrasado</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-warning">
-                {alerts.filter(a => a.status === "due-soon").length}
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">Em breve</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-success">
-                {alerts.filter(a => a.status === "ok").length}
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">Em dia</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Lista de Alertas */}
       <div className="space-y-4">
         {alerts.map((alert) => (
-          <Card 
+          <Card
             key={alert.id}
             className={
-              alert.status === "overdue" 
-                ? "border-destructive/20 bg-destructive/5" 
+              alert.status === "overdue"
+                ? "border-destructive/20 bg-destructive/5"
                 : alert.status === "due-soon"
-                ? "border-warning/20 bg-warning/5"
-                : ""
+                  ? "border-warning/20 bg-warning/5"
+                  : ""
             }
           >
             <CardHeader>
@@ -142,7 +129,7 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
               <div className="flex flex-col sm:flex-row gap-2">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-1 h-12">
+                    <Button variant="outline" className="cursor-pointer flex-1 h-12">
                       Entenda Por Quê
                     </Button>
                   </DialogTrigger>
@@ -154,8 +141,8 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="mt-4">
-                      <Button 
-                        className="w-full h-12"
+                      <Button
+                        className="w-full h-12 cursor-pointer"
                         onClick={() => {
                           onNavigate('scheduling', { examType: alert.exam });
                         }}
@@ -167,8 +154,8 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
                 </Dialog>
 
                 {alert.status !== "ok" && (
-                  <Button 
-                    className="flex-1 h-12"
+                  <Button
+                    className="flex-1 h-12 cursor-pointer"
                     onClick={() => onNavigate('scheduling', { examType: alert.exam })}
                   >
                     Agendar Agora
