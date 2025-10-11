@@ -43,7 +43,7 @@ export function NotificationsList({ onNavigate }: NotificationsListProps) {
       message: "É hora de fazer sua colonoscopia anual. Agende agora!",
       date: "10/10/2025",
       read: true,
-      action: "Agendar",
+      action: "Agendar Exame",
     },
     {
       id: 4,
@@ -67,7 +67,7 @@ export function NotificationsList({ onNavigate }: NotificationsListProps) {
       message: "Está na hora do seu check-up anual. Que tal agendar?",
       date: "01/10/2025",
       read: true,
-      action: "Agendar",
+      action: "Agendar Exame",
     },
   ];
 
@@ -97,7 +97,7 @@ export function NotificationsList({ onNavigate }: NotificationsListProps) {
       <div className="space-y-3">
         {notifications.map((notification) => {
           const Icon = notification.icon;
-          
+
           return (
             <Card key={notification.id} className={notification.read ? "" : "border-primary/20"}>
               <CardContent className="p-4">
@@ -105,7 +105,7 @@ export function NotificationsList({ onNavigate }: NotificationsListProps) {
                   <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${notification.bgColor}`}>
                     <Icon className={`h-5 w-5 ${notification.color}`} />
                   </div>
-                  
+
                   <div className="flex-1 min-w-0 space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <h3>{notification.title}</h3>
@@ -113,19 +113,20 @@ export function NotificationsList({ onNavigate }: NotificationsListProps) {
                         <Badge className="bg-primary flex-shrink-0">Nova</Badge>
                       )}
                     </div>
-                    
+
                     <p className="text-sm text-muted-foreground">
                       {notification.message}
                     </p>
-                    
+
                     <div className="flex items-center justify-between gap-2 pt-1">
                       <span className="text-xs text-muted-foreground">
                         {notification.date}
                       </span>
-                      
+
                       {notification.action && (
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          className="cursor-pointer"
+                          variant="outline"
                           size="sm"
                           onClick={() => handleAction(notification)}
                         >

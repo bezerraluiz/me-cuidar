@@ -85,45 +85,17 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
         </p>
       </div>
 
-      {/* Resumo */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-destructive">1</div>
-              <p className="text-sm text-muted-foreground mt-1">Atrasado</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-warning">1</div>
-              <p className="text-sm text-muted-foreground mt-1">Em breve</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <div className="text-3xl text-success">1</div>
-              <p className="text-sm text-muted-foreground mt-1">Em dia</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Lista de Alertas */}
       <div className="space-y-4">
         {alerts.map((alert) => (
-          <Card 
+          <Card
             key={alert.id}
             className={
-              alert.status === "overdue" 
-                ? "border-destructive/20 bg-destructive/5" 
+              alert.status === "overdue"
+                ? "border-destructive/20 bg-destructive/5"
                 : alert.status === "due-soon"
-                ? "border-warning/20 bg-warning/5"
-                : ""
+                  ? "border-warning/20 bg-warning/5"
+                  : ""
             }
           >
             <CardHeader>
@@ -157,7 +129,7 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
               <div className="flex flex-col sm:flex-row gap-2">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-1 h-12">
+                    <Button variant="outline" className="cursor-pointer flex-1 h-12">
                       Entenda Por Quê
                     </Button>
                   </DialogTrigger>
@@ -169,8 +141,8 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="mt-4">
-                      <Button 
-                        className="w-full h-12"
+                      <Button
+                        className="w-full h-12 cursor-pointer"
                         onClick={() => {
                           onNavigate('scheduling', { examType: alert.exam });
                         }}
@@ -182,8 +154,8 @@ export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {
                 </Dialog>
 
                 {alert.status !== "ok" && (
-                  <Button 
-                    className="flex-1 h-12"
+                  <Button
+                    className="flex-1 h-12 cursor-pointer"
                     onClick={() => onNavigate('scheduling', { examType: alert.exam })}
                   >
                     Agendar Agora

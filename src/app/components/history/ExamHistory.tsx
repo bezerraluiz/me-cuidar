@@ -124,7 +124,7 @@ export function ExamHistory({ onNavigate }: ExamHistoryProps) {
           <Card key={exam.id} className="relative">
             {/* Ponto na timeline */}
             <div className="absolute left-5 top-6 h-3 w-3 rounded-full border-4 border-background bg-primary hidden sm:block" />
-            
+
             <CardHeader className="sm:ml-8">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -138,7 +138,7 @@ export function ExamHistory({ onNavigate }: ExamHistoryProps) {
                     <span>{exam.clinic}</span>
                   </div>
                 </div>
-                
+
                 {exam.status === "available" ? (
                   <Badge className="bg-success flex-shrink-0">Disponível</Badge>
                 ) : (
@@ -159,7 +159,7 @@ export function ExamHistory({ onNavigate }: ExamHistoryProps) {
               )}
 
               {exam.status === "available" ? (
-                <Button variant="outline" className="w-full h-12 gap-2">
+                <Button variant="outline" className="cursor-pointer w-full h-12 gap-2">
                   <Download className="h-5 w-5" />
                   Baixar Resultado em PDF
                 </Button>

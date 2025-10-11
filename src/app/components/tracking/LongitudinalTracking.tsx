@@ -37,28 +37,6 @@ export function LongitudinalTracking() {
         </CardContent>
       </Card>
 
-      {/* Resumo Geral */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl text-primary">{trackingData.totalExams}</div>
-            <p className="text-sm text-muted-foreground mt-1">Exames Realizados</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl text-primary">{trackingData.completionRate}%</div>
-            <p className="text-sm text-muted-foreground mt-1">Taxa de Adesão</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <div className="text-3xl text-primary">{trackingData.yearsTracking}</div>
-            <p className="text-sm text-muted-foreground mt-1">Anos de Cuidado</p>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Progresso Geral */}
       <Card>
         <CardHeader>

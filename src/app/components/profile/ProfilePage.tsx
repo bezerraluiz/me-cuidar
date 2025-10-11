@@ -37,7 +37,7 @@ export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
             </Avatar>
             <h2>{userData.name}</h2>
             <p className="text-muted-foreground mt-1">{userData.age} anos</p>
-            <Button variant="outline" className="mt-4 gap-2" size="sm">
+            <Button variant="outline" className="cursor-pointer mt-4 gap-2" size="sm">
               <Edit className="h-4 w-4" />
               Editar Foto
             </Button>
@@ -112,7 +112,7 @@ export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full h-12 gap-2">
+          <Button variant="outline" className="cursor-pointer w-full h-12 gap-2">
             <Edit className="h-5 w-5" />
             Editar Dados Pessoais
           </Button>
@@ -162,7 +162,7 @@ export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
             </div>
           </div>
 
-          <Button variant="outline" className="w-full h-12 gap-2">
+          <Button variant="outline" className="cursor-pointer w-full h-12 gap-2">
             <Edit className="h-5 w-5" />
             Editar Convênio
           </Button>
@@ -172,14 +172,14 @@ export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
       {/* Ações */}
       <Card>
         <CardContent className="pt-6 space-y-3">
-          <Button variant="outline" className="w-full h-12 justify-start gap-2">
+          <Button variant="outline" className="cursor-pointer w-full h-12 justify-start gap-2">
             <User className="h-5 w-5" />
             Configurações de Conta
           </Button>
-          
-          <Button 
-            variant="outline" 
-            className="w-full h-12 justify-start gap-2 text-destructive hover:text-destructive"
+
+          <Button
+            variant="outline"
+            className="w-full h-12 justify-start cursor-pointer gap-2 border-red-500 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700"
             onClick={() => onLogout?.()}
           >
             <LogOut className="h-5 w-5" />

@@ -68,9 +68,9 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
         <div className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white"/>
-              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2"/>
-              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2"/>
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" />
+              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" />
+              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" />
             </svg>
           </div>
           <div>
@@ -126,7 +126,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
 
               <Button
                 type="submit"
-                className="w-full h-12"
+                className="cursor-pointer w-full h-12"
                 disabled={isLoading}
               >
                 {isLoading ? "Entrando..." : "Entrar"}
@@ -136,7 +136,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
                 <Button
                   type="button"
                   variant="link"
-                  className="text-sm"
+                  className="cursor-pointer text-sm"
                   onClick={() => {
                     setError("Funcionalidade de recuperação de senha em desenvolvimento");
                   }}
@@ -156,7 +156,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             </p>
             <Button
               variant="outline"
-              className="w-full h-12"
+              className="cursor-pointer w-full h-12"
               onClick={onNavigateToRegister}
             >
               Criar Nova Conta

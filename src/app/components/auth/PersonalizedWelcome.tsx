@@ -12,7 +12,7 @@ interface PersonalizedWelcomeProps {
 export function PersonalizedWelcome({ userData, onComplete }: PersonalizedWelcomeProps) {
   const recommendations = assessHealthRisks(userData as HealthData);
   const age = calculateAge(userData.birthDate);
-  
+
   const highPriorityCount = recommendations.filter(r => r.priority === "high").length;
   const mediumPriorityCount = recommendations.filter(r => r.priority === "medium").length;
 
@@ -130,7 +130,7 @@ export function PersonalizedWelcome({ userData, onComplete }: PersonalizedWelcom
               <div className="flex-1">
                 <h4>Você deu o primeiro passo!</h4>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Ao fornecer suas informações de saúde, você está sendo proativo no cuidado com sua saúde. 
+                  Ao fornecer suas informações de saúde, você está sendo proativo no cuidado com sua saúde.
                   Vamos ajudá-lo a manter em dia todos os seus exames preventivos!
                 </p>
               </div>
@@ -147,7 +147,7 @@ export function PersonalizedWelcome({ userData, onComplete }: PersonalizedWelcom
                 <li className="flex gap-2">
                   <span>•</span>
                   <span>
-                    Estas são recomendações gerais baseadas em diretrizes médicas. Sempre consulte 
+                    Estas são recomendações gerais baseadas em diretrizes médicas. Sempre consulte
                     seu médico para orientações específicas.
                   </span>
                 </li>
@@ -170,12 +170,12 @@ export function PersonalizedWelcome({ userData, onComplete }: PersonalizedWelcom
 
         {/* Botão para Começar */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button className="flex-1 h-14" onClick={onComplete}>
+          <Button className="cursor-pointer flex-1 h-14" onClick={onComplete}>
             Ir para o Painel Principal
           </Button>
-          <Button 
-            variant="outline" 
-            className="flex-1 h-14"
+          <Button
+            variant="outline"
+            className="cursor-pointer flex-1 h-14"
             onClick={onComplete}
           >
             Agendar Primeiro Exame
