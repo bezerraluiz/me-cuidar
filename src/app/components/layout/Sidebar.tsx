@@ -54,7 +54,7 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
                 </svg>
               </span>
             </div>
-            <span>Saúde Preventiva</span>
+            <span>Bem Cuidar</span>
           </div>
           
           <Button

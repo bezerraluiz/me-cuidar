@@ -2,28 +2,22 @@ import { Calendar, Clock, MapPin, Plus, FileText, AlertCircle, Activity, Graduat
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { MOCK_NEXT_EXAM, MOCK_EXAM_HISTORY, MOCK_EXAMS } from "../../data/mockData";
 
 interface DashboardProps {
-  onNavigate: (page: string, data?: any) => void;
+  onNavigate: (page: string, data?: { examType?: string }) => void;
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
-  // Dados mock
-  const nextExam = {
-    type: "Mamografia",
-    date: "2025-10-18",
-    time: "14:30",
-    clinic: "Clínica São Lucas",
-    address: "Rua das Flores, 123",
-  };
-
-  const availableResults = 2;
-  const pendingAlerts = 1;
+  // Dados mock centralizados
+  const nextExam = MOCK_NEXT_EXAM;
+  const availableResults = MOCK_EXAM_HISTORY.filter(exam => exam.resultAvailable).length;
+  const pendingAlerts = MOCK_EXAMS.filter(exam => exam.status === "overdue" || exam.status === "due-soon").length;
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
       {/* Próximo Exame */}
-      {nextExam && (
+      {nextExam ? (
         <Card className="border-primary/20 bg-accent/30">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -34,25 +28,25 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <h3 className="text-primary">{nextExam.type}</h3>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Calendar className="h-5 w-5 flex-shrink-0" />
                   <span>
-                    {new Date(nextExam.date).toLocaleDateString('pt-BR', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    {new Date(nextExam.date).toLocaleDateString('pt-BR', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
                     })}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Clock className="h-5 w-5 flex-shrink-0" />
                   <span>{nextExam.time}</span>
                 </div>
-                
+
                 <div className="flex items-start gap-2 text-muted-foreground">
                   <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" />
                   <div>
@@ -62,8 +56,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
               </div>
             </div>
-            
-            <Button 
+
+            <Button
               className="w-full h-12"
               onClick={() => onNavigate('exam-details')}
             >
@@ -71,7 +65,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </Button>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       {/* Alerta de Exames Pendentes */}
       {pendingAlerts > 0 && (
@@ -139,7 +133,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Activity className="h-6 w-6 text-primary" />
             </div>
-            <h4>Minha Saúde Preventiva</h4>
+            <h4>Meu Bem Cuidar</h4>
             <p className="text-sm text-muted-foreground mt-1">
               Acompanhe seus exames
             </p>

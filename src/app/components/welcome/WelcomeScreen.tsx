@@ -27,7 +27,7 @@ export function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
             </svg>
           </div>
           <div>
-            <h1>Bem-vindo ao Saúde Preventiva</h1>
+            <h1>Bem-vindo ao Bem Cuidar</h1>
             <p className="text-muted-foreground mt-2">
               Seu companheiro para cuidar da sua saúde
             </p>
