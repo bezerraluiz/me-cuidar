@@ -1,103 +1,207 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+import { useState } from "react";
+import { Header } from "./components/layout/Header";
+import { MobileNav } from "./components/layout/MobileNav";
+import { Sidebar } from "./components/layout/Sidebar";
+import { Dashboard } from "./components/home/Dashboard";
+import { ProactiveAlerts } from "./components/alerts/ProactiveAlerts";
+import { MyPreventiveHealth } from "./components/health/MyPreventiveHealth";
+import { EducationalModule } from "./components/education/EducationalModule";
+import { SchedulingFlow } from "./components/scheduling/SchedulingFlow";
+import { NotificationsList } from "./components/notifications/NotificationsList";
+import { ExamHistory } from "./components/history/ExamHistory";
+import { ProfilePage } from "./components/profile/ProfilePage";
+import { LongitudinalTracking } from "./components/tracking/LongitudinalTracking";
+import { CheckIn } from "./components/checkin/CheckIn";
+import { VirtualQueue } from "./components/queue/VirtualQueue";
+import { LoginPage } from "./components/auth/LoginPage";
+import { RegistrationFlow } from "./components/auth/RegistrationFlow";
+import { PersonalizedWelcome } from "./components/auth/PersonalizedWelcome";
+import { Toaster } from "./components/ui/sonner";
+import { toast } from "sonner";
+
+function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authView, setAuthView] = useState<"login" | "register">("login");
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [currentPage, setCurrentPage] = useState("home");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [schedulingData, setSchedulingData] = useState<any>(null);
+  const [userData, setUserData] = useState<any>(null);
+
+  const handleLogin = (cpf: string) => {
+    setIsAuthenticated(true);
+    // Dados mock do usuário baseados no CPF
+    setUserData({
+      name: "Maria Silva",
+      cpf: cpf,
+    });
+    toast.success("Login realizado com sucesso!", {
+      description: "Bem-vindo de volta!",
+    });
+  };
+
+  const handleRegistrationComplete = (data: any) => {
+    setUserData(data);
+    setShowWelcome(true);
+  };
+
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
+    setIsAuthenticated(true);
+    toast.success("Bem-vindo ao Saúde Preventiva!", {
+      description: "Vamos cuidar juntos da sua saúde!",
+    });
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserData(null);
+    setCurrentPage("home");
+    toast.info("Você saiu da sua conta");
+  };
+
+  const handleNavigate = (page: string, data?: any) => {
+    if (page === "logout") {
+      handleLogout();
+      return;
+    }
+
+    setCurrentPage(page);
+    if (data) {
+      setSchedulingData(data);
+    }
+    // Scroll to top on navigation
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Mostrar tela de boas-vindas personalizada após cadastro
+  if (showWelcome && userData) {
+    return (
+      <>
+        <PersonalizedWelcome
+          userData={userData}
+          onComplete={handleWelcomeComplete}
         />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+        <Toaster />
+      </>
+    );
+  }
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+  // Se não estiver autenticado, mostrar telas de login/registro
+  if (!isAuthenticated) {
+    if (authView === "login") {
+      return (
+        <>
+          <LoginPage
+            onLogin={handleLogin}
+            onNavigateToRegister={() => setAuthView("register")}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <Toaster />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <RegistrationFlow
+            onComplete={handleRegistrationComplete}
+            onBack={() => setAuthView("login")}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+          <Toaster />
+        </>
+      );
+    }
+  }
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "home":
+        return <Dashboard onNavigate={handleNavigate} />;
+      case "alerts":
+        return <ProactiveAlerts onNavigate={handleNavigate} />;
+      case "health":
+        return <MyPreventiveHealth onNavigate={handleNavigate} />;
+      case "education":
+        return <EducationalModule />;
+      case "scheduling":
+      case "exam-details":
+        return (
+          <SchedulingFlow
+            onNavigate={handleNavigate}
+            initialExamType={schedulingData?.examType}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        );
+      case "notifications":
+        return <NotificationsList onNavigate={handleNavigate} />;
+      case "exams":
+        return <ExamHistory onNavigate={handleNavigate} />;
+      case "profile":
+        return <ProfilePage onNavigate={handleNavigate} onLogout={handleLogout} />;
+      case "tracking":
+        return <LongitudinalTracking />;
+      case "checkin":
+        return <CheckIn onCheckInComplete={() => handleNavigate("queue")} />;
+      case "queue":
+        return <VirtualQueue onCancel={() => handleNavigate("home")} />;
+      default:
+        return <Dashboard onNavigate={handleNavigate} />;
+    }
+  };
+
+  // Mapear páginas do mobile nav para as páginas corretas
+  const handleMobileNavigate = (page: string) => {
+    const pageMap: Record<string, string> = {
+      home: "home",
+      exams: "exams",
+      alerts: "alerts",
+      profile: "profile",
+    };
+    handleNavigate(pageMap[page] || page);
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Sidebar para desktop */}
+      <Sidebar
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      {/* Main Content */}
+      <div className="md:pl-64">
+        {/* Header */}
+        <Header
+          onMenuClick={() => setSidebarOpen(true)}
+          userName={userData?.fullName || userData?.name || "Usuário"}
+          notificationCount={2}
+          onNotificationClick={() => handleNavigate("notifications")}
+        />
+
+        {/* Page Content */}
+        <main className="container mx-auto max-w-4xl px-4 py-6">
+          {renderPage()}
+        </main>
+      </div>
+
+      {/* Mobile Navigation */}
+      <MobileNav
+        currentPage={
+          currentPage === "home" ? "home" :
+          currentPage === "alerts" ? "alerts" :
+          currentPage === "health" || currentPage === "exams" ? "exams" :
+          currentPage === "profile" ? "profile" :
+          "home"
+        }
+        onNavigate={handleMobileNavigate}
+      />
+
+      {/* Toast Notifications */}
+      <Toaster />
     </div>
   );
 }
+
+export default Home;
