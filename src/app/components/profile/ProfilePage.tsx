@@ -7,10 +7,12 @@ import { Separator } from "../ui/separator";
 interface ProfilePageProps {
   onNavigate: (page: string) => void;
   onLogout?: () => void;
+  userData?: any;
 }
 
-export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
-  const userData = {
+export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: ProfilePageProps) {
+  // Usar dados do usuário logado ou dados padrão
+  const defaultData = {
     name: "Maria Silva",
     email: "maria.silva@email.com",
     phone: "(11) 98765-4321",
@@ -22,6 +24,16 @@ export function ProfilePage({ onNavigate, onLogout }: ProfilePageProps) {
       number: "123456789",
       plan: "Plus",
     },
+  };
+
+  const userData = {
+    name: propUserData?.fullName || propUserData?.name || defaultData.name,
+    email: propUserData?.email || defaultData.email,
+    phone: propUserData?.phone || defaultData.phone,
+    cpf: propUserData?.cpf || defaultData.cpf,
+    birthDate: propUserData?.birthDate || defaultData.birthDate,
+    age: propUserData?.age || defaultData.age,
+    insurance: propUserData?.insurance || defaultData.insurance,
   };
 
   return (

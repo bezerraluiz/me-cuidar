@@ -7,9 +7,14 @@ interface HeaderProps {
   userName: string;
   notificationCount?: number;
   onNotificationClick: () => void;
+  onProfileClick?: () => void;
+  onBack?: () => void;
+  onForward?: () => void;
+  canGoBack?: boolean;
+  canGoForward?: boolean;
 }
 
-export function Header({ onMenuClick, userName, notificationCount = 0, onNotificationClick }: HeaderProps) {
+export function Header({ onMenuClick, userName, notificationCount = 0, onNotificationClick, onProfileClick }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="flex h-16 items-center gap-4 px-4 md:px-6">
@@ -52,14 +57,18 @@ export function Header({ onMenuClick, userName, notificationCount = 0, onNotific
             <span className="sr-only">Notificações</span>
           </Button>
 
-          <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={onProfileClick}
+            className="hidden md:flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+            title="Acessar perfil"
+          >
             <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="text-primary">
                 {userName.charAt(0).toUpperCase()}
               </span>
             </div>
             <span className="hidden lg:inline-block">{userName}</span>
-          </div>
+          </button>
         </div>
       </div>
     </header>
