@@ -56,12 +56,12 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
 
     // Validar se é o usuário mock (Regina dos Santos)
     if (cpf !== MOCK_USER.cpf) {
-      setError("CPF não encontrado. Use o CPF: 123.456.789-00");
+      setError("CPF não encontrado.");
       return;
     }
 
     if (password !== MOCK_USER.password) {
-      setError("Senha incorreta. Use a senha: regina123");
+      setError("Senha incorreta.");
       return;
     }
 
@@ -92,6 +92,18 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             </p>
           </div>
         </div>
+
+        {/* Credenciais de Teste */}
+        <Alert className="border-blue-500 bg-blue-50">
+          <AlertCircle className="h-4 w-4 text-blue-600" />
+          <AlertDescription className="text-blue-900">
+            <strong>Credenciais de teste:</strong>
+            <br />
+            CPF: 123.456.789-00
+            <br />
+            Senha: regina123
+          </AlertDescription>
+        </Alert>
 
         {/* Card de Login */}
         <Card>
