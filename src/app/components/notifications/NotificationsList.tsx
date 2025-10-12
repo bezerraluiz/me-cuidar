@@ -1,11 +1,25 @@
-import { Bell, Calendar, FileText, AlertCircle, CheckCircle } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Bell, Calendar, FileText, AlertCircle, CheckCircle, LucideIcon } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
+interface Notification {
+  id: number;
+  type: string;
+  icon?: LucideIcon;
+  color?: string;
+  bgColor?: string;
+  title: string;
+  message: string;
+  date: string;
+  read: boolean;
+  action: string | null;
+}
+
 interface NotificationsListProps {
   onNavigate: (page: string, data?: any) => void;
-  notifications?: any[];
+  notifications?: Notification[];
   onMarkAsRead?: (notificationId: number) => void;
   onMarkAllAsRead?: () => void;
 }

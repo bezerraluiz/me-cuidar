@@ -5,9 +5,20 @@ import { useState } from "react";
 import { cn } from "../ui/utils";
 import { MOCK_EXAMS } from "../../data/mockData";
 
+interface Exam {
+  id: number;
+  status: string;
+  name: string;
+  lastDone: string | null;
+  nextDue: string;
+  frequency: string;
+  ageRecommendation: string;
+  details: string;
+}
+
 interface MyPreventiveHealthProps {
   onNavigate: (page: string, data?: { examType?: string }) => void;
-  userExams?: any[];
+  userExams?: Exam[];
 }
 
 export function MyPreventiveHealth({ onNavigate, userExams }: MyPreventiveHealthProps) {
@@ -68,10 +79,10 @@ export function MyPreventiveHealth({ onNavigate, userExams }: MyPreventiveHealth
       <div className="space-y-3">
         {exams.map((exam) => {
           const isExpanded = expandedExam === exam.id;
-          
+
           return (
             <Card key={exam.id}>
-              <CardHeader 
+              <CardHeader
                 className="cursor-pointer"
                 onClick={() => setExpandedExam(isExpanded ? null : exam.id)}
               >
@@ -120,8 +131,8 @@ export function MyPreventiveHealth({ onNavigate, userExams }: MyPreventiveHealth
                   </div>
 
                   {exam.status !== "ok" && (
-                    <Button 
-                      className="w-full h-12"
+                    <Button
+                      className="cursor-pointer w-full h-12"
                       onClick={(e) => {
                         e.stopPropagation();
                         onNavigate('scheduling', { examType: exam.name });
@@ -138,8 +149,8 @@ export function MyPreventiveHealth({ onNavigate, userExams }: MyPreventiveHealth
       </div>
 
       {/* Botão Flutuante */}
-      <Button 
-        className="w-full h-14"
+      <Button
+        className="cursor-pointer w-full h-14"
         size="lg"
         onClick={() => onNavigate('scheduling')}
       >

@@ -1,5 +1,6 @@
-import { Calendar, Clock, MapPin, Plus, FileText, AlertCircle, Activity, GraduationCap, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Calendar, Clock, MapPin, Plus, AlertCircle, TrendingUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 
@@ -17,7 +18,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     address: "Rua das Flores, 123",
   };
 
-  const availableResults = 2;
+  //const availableResults = 2;
   const pendingAlerts = 1;
 
   return (

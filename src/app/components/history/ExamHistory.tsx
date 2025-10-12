@@ -120,7 +120,7 @@ export function ExamHistory({ onNavigate }: ExamHistoryProps) {
         {/* Linha vertical da timeline */}
         <div className="absolute left-5 top-6 bottom-6 w-0.5 bg-border hidden sm:block" />
 
-        {filteredExams.map((exam, index) => (
+        {filteredExams.map((exam) => (
           <Card key={exam.id} className="relative">
             {/* Ponto na timeline */}
             <div className="absolute left-5 top-6 h-3 w-3 rounded-full border-4 border-background bg-primary hidden sm:block" />

@@ -1,13 +1,23 @@
 import { Clock, Play } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
+interface Article {
+  id: number;
+  category: string;
+  title: string;
+  summary: string;
+  readTime: string;
+  image: string;
+  content: string;
+}
+
 export function EducationalModule() {
-  const [selectedArticle, setSelectedArticle] = useState<any>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const articles = [
     {

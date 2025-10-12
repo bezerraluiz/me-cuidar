@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { User, Mail, Phone, Calendar, CreditCard, Edit, LogOut, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 
-interface ProfilePageProps {
-  onNavigate: (page: string) => void;
-  onLogout?: () => void;
-  userData?: any;
+export interface ProfilePageProps {
+  onLogout: () => void;
+  userData: any;
+  onNavigate: (page: string, data?: any) => void;
 }
 
-export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: ProfilePageProps) {
+export function ProfilePage({ onLogout, userData: propUserData, onNavigate }: ProfilePageProps) {
   // Se não houver dados do usuário, a lógica de autenticação do page.tsx irá redirecionar para login
   if (!propUserData) {
     return null;
@@ -68,7 +70,7 @@ export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: Pr
           <div className="flex flex-col items-center text-center">
             <Avatar className="h-24 w-24 mb-4">
               <AvatarFallback className="bg-primary/10 text-primary text-2xl">
-                {userData.name.split(' ').map(n => n[0]).join('')}
+                {userData.name.split(' ').map((n: any[]) => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <h2>{userData.name}</h2>

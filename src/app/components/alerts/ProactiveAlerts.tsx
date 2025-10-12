@@ -12,7 +12,7 @@ import {
 } from "../ui/dialog";
 
 interface ProactiveAlertsProps {
-  onNavigate: (page: string, data?: any) => void;
+  onNavigate: (page: string, data?: { examType: string }) => void;
 }
 
 export function ProactiveAlerts({ onNavigate }: ProactiveAlertsProps) {

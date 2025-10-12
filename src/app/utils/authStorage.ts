@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Utilitário para gerenciar o armazenamento de autenticação com expiração
  */

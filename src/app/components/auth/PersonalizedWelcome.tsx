@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CheckCircle, AlertCircle, Info } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
@@ -14,7 +15,7 @@ export function PersonalizedWelcome({ userData, onComplete }: PersonalizedWelcom
   const age = calculateAge(userData.birthDate);
 
   const highPriorityCount = recommendations.filter(r => r.priority === "high").length;
-  const mediumPriorityCount = recommendations.filter(r => r.priority === "medium").length;
+  //const mediumPriorityCount = recommendations.filter(r => r.priority === "medium").length;
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
