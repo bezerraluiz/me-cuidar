@@ -77,17 +77,17 @@ export function CheckIn({ onCheckInComplete }: CheckInProps) {
             <div>
               <h3>{examDetails.type}</h3>
             </div>
-            
+
             <div className="flex items-center gap-2 text-muted-foreground">
               <Calendar className="h-5 w-5 flex-shrink-0" />
               <span>{examDetails.date}</span>
             </div>
-            
+
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="h-5 w-5 flex-shrink-0" />
               <span>{examDetails.time}</span>
             </div>
-            
+
             <div className="flex items-start gap-2 text-muted-foreground">
               <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" />
               <div>
@@ -116,7 +116,7 @@ export function CheckIn({ onCheckInComplete }: CheckInProps) {
         </Card>
 
         <Button
-          className="w-full h-16 text-lg"
+          className="cursor-pointer w-full h-16 text-lg"
           size="lg"
           onClick={handleCheckIn}
         >
