@@ -93,8 +93,8 @@ export function EducationalModule() {
 
   const [selectedCategory, setSelectedCategory] = useState("todos");
 
-  const filteredArticles = selectedCategory === "todos" 
-    ? articles 
+  const filteredArticles = selectedCategory === "todos"
+    ? articles
     : articles.filter(a => a.category === selectedCategory);
 
   return (
@@ -122,14 +122,14 @@ export function EducationalModule() {
 
       <Tabs defaultValue="articles" className="w-full">
         <TabsList className="grid w-full grid-cols-2 h-12">
-          <TabsTrigger value="articles">Artigos</TabsTrigger>
-          <TabsTrigger value="videos">Vídeos</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="articles">Artigos</TabsTrigger>
+          <TabsTrigger className="cursor-pointer" value="videos">Vídeos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="articles" className="space-y-4 mt-6">
           {filteredArticles.map((article) => (
-            <Card 
-              key={article.id} 
+            <Card
+              key={article.id}
               className="cursor-pointer transition-colors hover:bg-accent"
               onClick={() => setSelectedArticle(article)}
             >
