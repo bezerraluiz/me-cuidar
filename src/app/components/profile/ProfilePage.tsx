@@ -1,4 +1,4 @@
-import { User, Mail, Phone, Calendar, CreditCard, Edit, LogOut } from "lucide-react";
+import { User, Mail, Phone, Calendar, CreditCard, Edit, LogOut, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback } from "../ui/avatar";
@@ -44,6 +44,15 @@ export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: Pr
     birthDate: propUserData.birthDate,
     birthDateFormatted: formatBirthDateWithAge(propUserData.birthDate),
     age: propUserData.age,
+    address: propUserData.address || {
+      street: "Não informado",
+      number: "Não informado",
+      complement: "Não informado",
+      neighborhood: "Não informado",
+      city: "Não informado",
+      state: "Não informado",
+      zipCode: "Não informado",
+    },
     insurance: propUserData.insurance || {
       name: "Não informado",
       number: "Não informado",
@@ -142,6 +151,104 @@ export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: Pr
           <Button variant="outline" className="cursor-pointer w-full h-12 gap-2">
             <Edit className="h-5 w-5" />
             Editar Dados Pessoais
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Endereço */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Endereço</CardTitle>
+          <CardDescription>Seu endereço cadastrado</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Rua</p>
+                <p>{userData.address.street}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Número</p>
+                <p>{userData.address.number}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Complemento</p>
+                <p>{userData.address.complement}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Bairro</p>
+                <p>{userData.address.neighborhood}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Cidade</p>
+                <p>{userData.address.city}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Estado</p>
+                <p>{userData.address.state}</p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <MapPin className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">CEP</p>
+                <p>{userData.address.zipCode}</p>
+              </div>
+            </div>
+          </div>
+
+          <Button variant="outline" className="cursor-pointer w-full h-12 gap-2">
+            <Edit className="h-5 w-5" />
+            Editar Endereço
           </Button>
         </CardContent>
       </Card>
