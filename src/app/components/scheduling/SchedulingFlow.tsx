@@ -1,11 +1,19 @@
 import { useState } from "react";
-import { ChevronLeft, Search, MapPin, Calendar, User, CheckCircle, QrCode } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { ChevronLeft, Search, MapPin, Calendar, CheckCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
 import { CustomCalendar } from "../ui/custom-calendar";
+
+interface Clinic {
+  id: number;
+  name: string;
+  distance: string;
+  address: string;
+  rating: number;
+}
 
 interface SchedulingFlowProps {
   onNavigate: (page: string) => void;
@@ -15,7 +23,7 @@ interface SchedulingFlowProps {
 export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowProps) {
   const [step, setStep] = useState(1);
   const [selectedExam, setSelectedExam] = useState(initialExamType || "");
-  const [selectedClinic, setSelectedClinic] = useState<any>(null);
+  const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
   const [formData, setFormData] = useState({

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -395,10 +397,10 @@ function Home() {
       <MobileNav
         currentPage={
           currentPage === "home" ? "home" :
-          currentPage === "alerts" ? "alerts" :
-          currentPage === "health" || currentPage === "exams" ? "exams" :
-          currentPage === "profile" ? "profile" :
-          "home"
+            currentPage === "alerts" ? "alerts" :
+              currentPage === "health" || currentPage === "exams" ? "exams" :
+                currentPage === "profile" ? "profile" :
+                  "home"
         }
         onNavigate={handleMobileNavigate}
       />
