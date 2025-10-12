@@ -21,6 +21,7 @@ import { PersonalizedWelcome } from "./components/auth/PersonalizedWelcome";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import { MOCK_USER } from "./data/mockData";
+import { saveAuthData, getAuthData, clearAuthData } from "./utils/authStorage";
 
 function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,19 +35,24 @@ function Home() {
   const [historyIndex, setHistoryIndex] = useState(0);
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    // Carregar dados da Regina dos Santos
-    setUserData({
-      name: MOCK_USER.fullName,
-      fullName: MOCK_USER.fullName,
-      cpf: MOCK_USER.cpf,
-      age: MOCK_USER.age,
-      phone: MOCK_USER.phone,
-      email: MOCK_USER.email,
-      address: MOCK_USER.address,
-    });
-    // Inicializar notificações
+  // Verificar se existe uma sessão salva ao carregar a página
+  useEffect(() => {
+    const savedUserData = getAuthData();
+
+    if (savedUserData) {
+      setIsAuthenticated(true);
+      setUserData(savedUserData);
+
+      // Inicializar notificações
+      initializeNotifications();
+
+      toast.success("Sessão restaurada!", {
+        description: `Bem-vinda de volta, ${savedUserData.fullName?.split(' ')[0] || 'Usuário'}!`,
+      });
+    }
+  }, []);
+
+  const initializeNotifications = () => {
     setNotifications([
       {
         id: 1,
@@ -94,6 +100,28 @@ function Home() {
         action: "Agendar",
       },
     ]);
+  };
+
+  const handleLogin = () => {
+    const userData = {
+      name: MOCK_USER.fullName,
+      fullName: MOCK_USER.fullName,
+      cpf: MOCK_USER.cpf,
+      age: MOCK_USER.age,
+      phone: MOCK_USER.phone,
+      email: MOCK_USER.email,
+      address: MOCK_USER.address,
+    };
+
+    setIsAuthenticated(true);
+    setUserData(userData);
+
+    // Salvar dados no storage com expiração de 30 dias
+    saveAuthData(userData);
+
+    // Inicializar notificações
+    initializeNotifications();
+
     toast.success("Login realizado com sucesso!", {
       description: `Bem-vinda de volta, ${MOCK_USER.fullName.split(' ')[0]}!`,
     });
@@ -101,12 +129,18 @@ function Home() {
 
   const handleRegistrationComplete = (data: any) => {
     setUserData(data);
+    // Salvar dados no storage
+    saveAuthData(data);
     setShowWelcome(true);
   };
 
   const handleWelcomeComplete = () => {
     setShowWelcome(false);
     setIsAuthenticated(true);
+
+    // Inicializar notificações
+    initializeNotifications();
+
     toast.success("Bem-vindo ao Bem Cuidar!", {
       description: "Vamos cuidar juntos da sua saúde!",
     });
@@ -116,6 +150,10 @@ function Home() {
     setIsAuthenticated(false);
     setUserData(null);
     setCurrentPage("home");
+
+    // Limpar dados do storage
+    clearAuthData();
+
     toast.info("Você saiu da sua conta");
   };
 
