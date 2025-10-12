@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
-import { Calendar as CalendarComponent } from "../ui/calendar";
+import { CustomCalendar } from "../ui/custom-calendar";
 
 interface SchedulingFlowProps {
   onNavigate: (page: string) => void;
@@ -233,13 +233,15 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
           </div>
 
           <Card>
-            <CardContent className="p-4 cursor-pointer">
-              <CalendarComponent
-                mode="single"
+            <CardContent className="p-0">
+              <CustomCalendar
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border-0"
-                disabled={(date) => date < new Date()}
+                disabled={(date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+                  return date < today;
+                }}
               />
             </CardContent>
           </Card>
