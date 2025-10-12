@@ -8,7 +8,7 @@ interface StoredAuthData {
   expiresAt: number;
 }
 
-const AUTH_STORAGE_KEY = "bem_cuidar_auth";
+const AUTH_STORAGE_KEY = "me_cuidar_auth";
 const EXPIRATION_DAYS = 30;
 
 /**
@@ -32,8 +32,25 @@ export function saveAuthData(userData: any): void {
 }
 
 /**
+ * Valida se os dados do usuário têm todos os campos necessários
+ */
+function validateUserData(userData: any): boolean {
+  // Campos obrigatórios
+  const requiredFields = ['id', 'fullName', 'cpf', 'age', 'birthDate', 'gender', 'email', 'phone'];
+
+  for (const field of requiredFields) {
+    if (!userData[field]) {
+      console.warn(`Campo obrigatório ausente: ${field}`);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * Recupera os dados de autenticação do localStorage
- * Retorna null se não existir, estiver expirado ou corrompido
+ * Retorna null se não existir, estiver expirado, corrompido ou incompleto
  */
 export function getAuthData(): any | null {
   try {
@@ -49,6 +66,13 @@ export function getAuthData(): any | null {
     // Verificar se os dados expiraram
     if (now > parsedData.expiresAt) {
       // Dados expirados, remover do storage
+      clearAuthData();
+      return null;
+    }
+
+    // Validar se os dados têm todos os campos necessários
+    if (!validateUserData(parsedData.userData)) {
+      console.warn("Dados do usuário incompletos no storage. Limpando e requerendo novo login.");
       clearAuthData();
       return null;
     }

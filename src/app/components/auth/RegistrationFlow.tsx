@@ -9,14 +9,73 @@ import { ChevronLeft, CheckCircle, AlertCircle, User, MapPin, Lock, Activity, He
 import { Alert, AlertDescription } from "../ui/alert";
 import { StepIndicator } from "./StepIndicator";
 
+interface ExamHistory {
+  done: boolean;
+  lastDate: string;
+}
+
+interface FamilyHistory {
+  breastCancer: boolean;
+  colonCancer: boolean;
+  prostateCancer: boolean;
+  lungCancer: boolean;
+  skinCancer: boolean;
+  other: boolean;
+  otherDescription: string;
+}
+
+interface UserData {
+  // Etapa 1: Dados Pessoais
+  fullName: string;
+  cpf: string;
+  birthDate: string;
+  gender: string;
+  phone: string;
+  email: string;
+
+  // Etapa 2: Endereço
+  zipCode: string;
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+
+  // Etapa 3: Senha
+  password: string;
+  confirmPassword: string;
+
+  // Etapa 4: Histórico de Saúde
+  isSmoker: string;
+  hasDiabetes: boolean;
+  hasHypertension: boolean;
+  hasHeartDisease: boolean;
+  hasObesity: boolean;
+  otherConditions: string;
+
+  // Etapa 5: Histórico Familiar
+  familyHistory: FamilyHistory;
+
+  // Etapa 6: Histórico de Exames
+  examsHistory: {
+    mammography: ExamHistory;
+    papSmear: ExamHistory;
+    colonoscopy: ExamHistory;
+    bloodTests: ExamHistory;
+    boneDensity: ExamHistory;
+  };
+}
+
 interface RegistrationFlowProps {
-  onComplete: (userData: any) => void;
+  onComplete: (userData: UserData) => void;
   onBack: () => void;
 }
 
 export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) {
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
+  const [isLoadingCEP, setIsLoadingCEP] = useState(false);
 
   // Dados do formulário
   const [formData, setFormData] = useState({
@@ -24,7 +83,9 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     fullName: "",
     cpf: "",
     birthDate: "",
+    gender: "",
     phone: "",
+    email: "",
 
     // Etapa 2: Endereço
     zipCode: "",
@@ -57,6 +118,15 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
       other: false,
       otherDescription: "",
     },
+
+    // Etapa 6: Histórico de Exames
+    examsHistory: {
+      mammography: { done: false, lastDate: "" },
+      papSmear: { done: false, lastDate: "" },
+      colonoscopy: { done: false, lastDate: "" },
+      bloodTests: { done: false, lastDate: "" },
+      boneDensity: { done: false, lastDate: "" },
+    },
   });
 
   const formatCPF = (value: string) => {
@@ -88,12 +158,54 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     return value;
   };
 
+  const handleZipCodeChange = async (value: string) => {
+    const formatted = formatZipCode(value);
+    setFormData({ ...formData, zipCode: formatted });
+
+    // Buscar endereço quando o CEP tiver 8 dígitos
+    const numbers = formatted.replace(/\D/g, "");
+    if (numbers.length === 8) {
+      setIsLoadingCEP(true);
+      setError("");
+
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${numbers}/json/`);
+        const data = await response.json();
+
+        if (data.erro) {
+          setError("CEP não encontrado. Verifique e tente novamente.");
+          setIsLoadingCEP(false);
+          return;
+        }
+
+        // Preencher automaticamente os campos de endereço
+        setFormData({
+          ...formData,
+          zipCode: formatted,
+          street: data.logradouro || "",
+          neighborhood: data.bairro || "",
+          city: data.localidade || "",
+          state: data.uf || "",
+        });
+      } catch {
+        setError("Erro ao buscar CEP. Tente novamente.");
+      } finally {
+        setIsLoadingCEP(false);
+      }
+    }
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const validateStep = (currentStep: number) => {
     setError("");
 
     switch (currentStep) {
       case 1:
-        if (!formData.fullName || !formData.cpf || !formData.birthDate || !formData.phone) {
+        if (!formData.fullName || !formData.cpf || !formData.birthDate || !formData.gender || !formData.phone || !formData.email) {
           setError("Por favor, preencha todos os campos obrigatórios");
           return false;
         }
@@ -103,6 +215,10 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
         }
         if (formData.phone.replace(/\D/g, "").length < 10) {
           setError("Telefone inválido");
+          return false;
+        }
+        if (!validateEmail(formData.email)) {
+          setError("Email inválido. Digite um email válido");
           return false;
         }
         break;
@@ -143,7 +259,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
 
   const handleNext = () => {
     if (validateStep(step)) {
-      if (step < 6) {
+      if (step < 7) {
         setStep(step + 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -170,10 +286,11 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
     "Senha",
     "Saúde",
     "Histórico Familiar",
+    "Exames Realizados",
     "Confirmação"
   ];
 
-  const stepIcons = [User, MapPin, Lock, Activity, Heart, CheckCircle];
+  const stepIcons = [User, MapPin, Lock, Activity, Heart, Activity, CheckCircle];
   const StepIcon = stepIcons[step - 1];
 
   return (
@@ -198,7 +315,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
             <div className="flex-1">
               <h1>Criar Nova Conta</h1>
               <p className="text-muted-foreground mt-1">
-                Passo {step} de 6: {stepLabels[step - 1]}
+                Passo {step} de 7: {stepLabels[step - 1]}
               </p>
             </div>
           </div>
@@ -206,7 +323,7 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
           {/* Indicador de Progresso */}
           <StepIndicator
             currentStep={step}
-            totalSteps={6}
+            totalSteps={7}
             stepLabels={stepLabels}
           />
         </div>
@@ -264,6 +381,33 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="gender">Gênero *</Label>
+                <RadioGroup
+                  value={formData.gender}
+                  onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                >
+                  <div className="flex items-center space-x-2 rounded-lg border p-4">
+                    <RadioGroupItem value="Feminino" id="feminino" />
+                    <Label htmlFor="feminino" className="flex-1 cursor-pointer">
+                      Feminino
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 rounded-lg border p-4">
+                    <RadioGroupItem value="Masculino" id="masculino" />
+                    <Label htmlFor="masculino" className="flex-1 cursor-pointer">
+                      Masculino
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 rounded-lg border p-4">
+                    <RadioGroupItem value="Outro" id="outro" />
+                    <Label htmlFor="outro" className="flex-1 cursor-pointer">
+                      Outro
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="phone">Telefone *</Label>
                 <Input
                   id="phone"
@@ -271,6 +415,18 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: formatPhone(e.target.value) })}
                   maxLength={15}
+                  className="h-12"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="@mail.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="h-12"
                 />
               </div>
@@ -298,10 +454,16 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
                   id="zipCode"
                   placeholder="00000-000"
                   value={formData.zipCode}
-                  onChange={(e) => setFormData({ ...formData, zipCode: formatZipCode(e.target.value) })}
+                  onChange={(e) => handleZipCodeChange(e.target.value)}
                   maxLength={9}
                   className="h-12"
+                  disabled={isLoadingCEP}
                 />
+                {isLoadingCEP && (
+                  <p className="text-sm text-muted-foreground">
+                    Buscando endereço...
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -693,8 +855,297 @@ export function RegistrationFlow({ onComplete, onBack }: RegistrationFlowProps) 
           </Card>
         )}
 
-        {/* Etapa 6: Confirmação */}
+        {/* Etapa 6: Histórico de Exames */}
         {step === 6 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Histórico de Exames Preventivos</CardTitle>
+              <CardDescription>
+                Nos conte se você já realizou algum desses exames preventivos. Isso nos ajuda a personalizar seus alertas.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Mamografia */}
+              <div className="space-y-3 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold">Mamografia</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Exame de raio-X das mamas
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="mammography-done"
+                      checked={formData.examsHistory.mammography.done}
+                      onCheckedChange={(checked) =>
+                        setFormData({
+                          ...formData,
+                          examsHistory: {
+                            ...formData.examsHistory,
+                            mammography: { ...formData.examsHistory.mammography, done: checked as boolean, lastDate: checked ? formData.examsHistory.mammography.lastDate : "" }
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="mammography-done" className="cursor-pointer">
+                      Já realizei este exame
+                    </Label>
+                  </div>
+                  {formData.examsHistory.mammography.done && (
+                    <div className="space-y-2">
+                      <Label htmlFor="mammography-date">Quando foi a última vez?</Label>
+                      <Input
+                        id="mammography-date"
+                        type="date"
+                        value={formData.examsHistory.mammography.lastDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            examsHistory: {
+                              ...formData.examsHistory,
+                              mammography: { ...formData.examsHistory.mammography, lastDate: e.target.value }
+                            }
+                          })
+                        }
+                        max={new Date().toISOString().split('T')[0]}
+                        className="h-12"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Papanicolau */}
+              <div className="space-y-3 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold">Papanicolau</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Exame preventivo do colo do útero
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="papSmear-done"
+                      checked={formData.examsHistory.papSmear.done}
+                      onCheckedChange={(checked) =>
+                        setFormData({
+                          ...formData,
+                          examsHistory: {
+                            ...formData.examsHistory,
+                            papSmear: { ...formData.examsHistory.papSmear, done: checked as boolean, lastDate: checked ? formData.examsHistory.papSmear.lastDate : "" }
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="papSmear-done" className="cursor-pointer">
+                      Já realizei este exame
+                    </Label>
+                  </div>
+                  {formData.examsHistory.papSmear.done && (
+                    <div className="space-y-2">
+                      <Label htmlFor="papSmear-date">Quando foi a última vez?</Label>
+                      <Input
+                        id="papSmear-date"
+                        type="date"
+                        value={formData.examsHistory.papSmear.lastDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            examsHistory: {
+                              ...formData.examsHistory,
+                              papSmear: { ...formData.examsHistory.papSmear, lastDate: e.target.value }
+                            }
+                          })
+                        }
+                        max={new Date().toISOString().split('T')[0]}
+                        className="h-12"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Colonoscopia */}
+              <div className="space-y-3 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold">Colonoscopia</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Exame do intestino grosso
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="colonoscopy-done"
+                      checked={formData.examsHistory.colonoscopy.done}
+                      onCheckedChange={(checked) =>
+                        setFormData({
+                          ...formData,
+                          examsHistory: {
+                            ...formData.examsHistory,
+                            colonoscopy: { ...formData.examsHistory.colonoscopy, done: checked as boolean, lastDate: checked ? formData.examsHistory.colonoscopy.lastDate : "" }
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="colonoscopy-done" className="cursor-pointer">
+                      Já realizei este exame
+                    </Label>
+                  </div>
+                  {formData.examsHistory.colonoscopy.done && (
+                    <div className="space-y-2">
+                      <Label htmlFor="colonoscopy-date">Quando foi a última vez?</Label>
+                      <Input
+                        id="colonoscopy-date"
+                        type="date"
+                        value={formData.examsHistory.colonoscopy.lastDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            examsHistory: {
+                              ...formData.examsHistory,
+                              colonoscopy: { ...formData.examsHistory.colonoscopy, lastDate: e.target.value }
+                            }
+                          })
+                        }
+                        max={new Date().toISOString().split('T')[0]}
+                        className="h-12"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Exames de Sangue */}
+              <div className="space-y-3 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold">Exames de Sangue</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Hemograma, glicemia, colesterol, etc.
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="bloodTests-done"
+                      checked={formData.examsHistory.bloodTests.done}
+                      onCheckedChange={(checked) =>
+                        setFormData({
+                          ...formData,
+                          examsHistory: {
+                            ...formData.examsHistory,
+                            bloodTests: { ...formData.examsHistory.bloodTests, done: checked as boolean, lastDate: checked ? formData.examsHistory.bloodTests.lastDate : "" }
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="bloodTests-done" className="cursor-pointer">
+                      Já realizei esses exames
+                    </Label>
+                  </div>
+                  {formData.examsHistory.bloodTests.done && (
+                    <div className="space-y-2">
+                      <Label htmlFor="bloodTests-date">Quando foi a última vez?</Label>
+                      <Input
+                        id="bloodTests-date"
+                        type="date"
+                        value={formData.examsHistory.bloodTests.lastDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            examsHistory: {
+                              ...formData.examsHistory,
+                              bloodTests: { ...formData.examsHistory.bloodTests, lastDate: e.target.value }
+                            }
+                          })
+                        }
+                        max={new Date().toISOString().split('T')[0]}
+                        className="h-12"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Densitometria Óssea */}
+              <div className="space-y-3 rounded-lg border p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <Label className="text-base font-semibold">Densitometria Óssea</Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Avaliação da densidade dos ossos
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="boneDensity-done"
+                      checked={formData.examsHistory.boneDensity.done}
+                      onCheckedChange={(checked) =>
+                        setFormData({
+                          ...formData,
+                          examsHistory: {
+                            ...formData.examsHistory,
+                            boneDensity: { ...formData.examsHistory.boneDensity, done: checked as boolean, lastDate: checked ? formData.examsHistory.boneDensity.lastDate : "" }
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="boneDensity-done" className="cursor-pointer">
+                      Já realizei este exame
+                    </Label>
+                  </div>
+                  {formData.examsHistory.boneDensity.done && (
+                    <div className="space-y-2">
+                      <Label htmlFor="boneDensity-date">Quando foi a última vez?</Label>
+                      <Input
+                        id="boneDensity-date"
+                        type="date"
+                        value={formData.examsHistory.boneDensity.lastDate}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            examsHistory: {
+                              ...formData.examsHistory,
+                              boneDensity: { ...formData.examsHistory.boneDensity, lastDate: e.target.value }
+                            }
+                          })
+                        }
+                        max={new Date().toISOString().split('T')[0]}
+                        className="h-12"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-primary/10 p-4">
+                <p className="text-sm text-muted-foreground">
+                  <strong>Não se preocupe!</strong><br />
+                  Se você nunca fez algum exame, basta não marcar a opção. Vamos te ajudar a organizar tudo!
+                </p>
+              </div>
+
+              <Button className="cursor-pointer w-full h-12" onClick={handleNext}>
+                Continuar
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Etapa 7: Confirmação */}
+        {step === 7 && (
           <Card>
             <CardContent className="pt-6 text-center space-y-6">
               <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-success/10">

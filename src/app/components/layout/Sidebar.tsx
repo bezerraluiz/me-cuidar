@@ -53,7 +53,7 @@ export function Sidebar({ currentPage, onNavigate, isOpen, onClose }: SidebarPro
                 </svg>
               </span>
             </div>
-            <span>Bem Cuidar</span>
+            <span>Me Cuidar</span>
           </div>
 
           <Button

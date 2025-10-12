@@ -11,29 +11,44 @@ interface ProfilePageProps {
 }
 
 export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: ProfilePageProps) {
-  // Usar dados do usuário logado ou dados padrão
-  const defaultData = {
-    name: "Maria Silva",
-    email: "maria.silva@email.com",
-    phone: "(11) 98765-4321",
-    cpf: "123.456.789-00",
-    birthDate: "15/03/1975",
-    age: 50,
-    insurance: {
-      name: "Unimed",
-      number: "123456789",
-      plan: "Plus",
-    },
+  // Se não houver dados do usuário, a lógica de autenticação do page.tsx irá redirecionar para login
+  if (!propUserData) {
+    return null;
+  }
+
+  // Função para formatar data e calcular idade
+  const formatBirthDateWithAge = (birthDateStr: string | undefined): string => {
+    if (!birthDateStr) {
+      return "Não informado";
+    }
+
+    const [year, month, day] = birthDateStr.split('-');
+    const birthDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return `${day}/${month}/${year} (${age} anos)`;
   };
 
   const userData = {
-    name: propUserData?.fullName || propUserData?.name || defaultData.name,
-    email: propUserData?.email || defaultData.email,
-    phone: propUserData?.phone || defaultData.phone,
-    cpf: propUserData?.cpf || defaultData.cpf,
-    birthDate: propUserData?.birthDate || defaultData.birthDate,
-    age: propUserData?.age || defaultData.age,
-    insurance: propUserData?.insurance || defaultData.insurance,
+    name: propUserData.fullName || propUserData.name,
+    email: propUserData.email,
+    phone: propUserData.phone,
+    cpf: propUserData.cpf,
+    birthDate: propUserData.birthDate,
+    birthDateFormatted: formatBirthDateWithAge(propUserData.birthDate),
+    age: propUserData.age,
+    insurance: propUserData.insurance || {
+      name: "Não informado",
+      number: "Não informado",
+      plan: "Não informado",
+    },
   };
 
   return (
@@ -107,7 +122,7 @@ export function ProfilePage({ onNavigate, onLogout, userData: propUserData }: Pr
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm text-muted-foreground">Data de Nascimento</p>
-                <p>{userData.birthDate}</p>
+                <p>{userData.birthDateFormatted}</p>
               </div>
             </div>
 

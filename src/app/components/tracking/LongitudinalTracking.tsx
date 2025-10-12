@@ -40,7 +40,7 @@ export function LongitudinalTracking() {
       {/* Progresso Geral */}
       <Card>
         <CardHeader>
-          <CardTitle>Seu Progresso no Bem Cuidar</CardTitle>
+          <CardTitle>Seu Progresso no Me Cuidar</CardTitle>
           <CardDescription>
             Você completou {trackingData.totalExams} de {trackingData.recommendedExams} exames recomendados
           </CardDescription>

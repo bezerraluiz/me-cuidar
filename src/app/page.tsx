@@ -20,8 +20,8 @@ import { RegistrationFlow } from "./components/auth/RegistrationFlow";
 import { PersonalizedWelcome } from "./components/auth/PersonalizedWelcome";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
-import { MOCK_USER } from "./data/mockData";
 import { saveAuthData, getAuthData, clearAuthData } from "./utils/authStorage";
+import { generateUserExams, calculateAge } from "./utils/examCalculator";
 
 function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -102,35 +102,66 @@ function Home() {
     ]);
   };
 
-  const handleLogin = () => {
-    const userData = {
-      name: MOCK_USER.fullName,
-      fullName: MOCK_USER.fullName,
-      cpf: MOCK_USER.cpf,
-      age: MOCK_USER.age,
-      phone: MOCK_USER.phone,
-      email: MOCK_USER.email,
-      address: MOCK_USER.address,
-    };
+  const handleLogin = (userData: any) => {
+    // Se o usuário não tem exames calculados, gerar agora
+    let enrichedData = userData;
+
+    if (!userData.exams) {
+      const userExams = generateUserExams(
+        userData.examsHistory || {
+          mammography: { done: false, lastDate: "" },
+          papSmear: { done: false, lastDate: "" },
+          colonoscopy: { done: false, lastDate: "" },
+          bloodTests: { done: false, lastDate: "" },
+          boneDensity: { done: false, lastDate: "" },
+        },
+        userData.age,
+        userData.gender || "Feminino",
+        false // TODO: verificar se tem hipertensão nos dados do usuário
+      );
+
+      enrichedData = {
+        ...userData,
+        exams: userExams,
+      };
+    }
 
     setIsAuthenticated(true);
-    setUserData(userData);
+    setUserData(enrichedData);
 
     // Salvar dados no storage com expiração de 30 dias
-    saveAuthData(userData);
+    saveAuthData(enrichedData);
 
     // Inicializar notificações
     initializeNotifications();
 
     toast.success("Login realizado com sucesso!", {
-      description: `Bem-vinda de volta, ${MOCK_USER.fullName.split(' ')[0]}!`,
+      description: `Bem-vindo(a) de volta, ${enrichedData.fullName.split(' ')[0]}!`,
     });
   };
 
   const handleRegistrationComplete = (data: any) => {
-    setUserData(data);
+    // Calcular idade do usuário
+    const age = calculateAge(data.birthDate);
+
+    // Gerar exames personalizados baseado no histórico informado
+    const userExams = generateUserExams(
+      data.examsHistory,
+      age,
+      data.gender || "Feminino",
+      data.hasHypertension || false
+    );
+
+    // Adicionar dados calculados
+    const enrichedData = {
+      ...data,
+      age,
+      exams: userExams,
+    };
+
+    setUserData(enrichedData);
     // Salvar dados no storage
-    saveAuthData(data);
+    saveAuthData(enrichedData);
     setShowWelcome(true);
   };
 
@@ -141,7 +172,7 @@ function Home() {
     // Inicializar notificações
     initializeNotifications();
 
-    toast.success("Bem-vindo ao Bem Cuidar!", {
+    toast.success("Bem-vindo ao Me Cuidar!", {
       description: "Vamos cuidar juntos da sua saúde!",
     });
   };
@@ -283,7 +314,7 @@ function Home() {
       case "alerts":
         return <ProactiveAlerts onNavigate={handleNavigate} />;
       case "health":
-        return <MyPreventiveHealth onNavigate={handleNavigate} />;
+        return <MyPreventiveHealth onNavigate={handleNavigate} userExams={userData?.exams} />;
       case "education":
         return <EducationalModule />;
       case "scheduling":

@@ -5,10 +5,23 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
-import { MOCK_USER } from "../../data/mockData";
+import { findUserByCPF, User } from "../../data/mockData";
+
+interface UserData {
+  id: string;
+  name: string;
+  fullName: string;
+  cpf: string;
+  age: number;
+  birthDate: string;
+  gender: string;
+  phone: string;
+  email: string;
+  address: User['address'];
+}
 
 interface LoginPageProps {
-  onLogin: () => void;
+  onLogin: (userData: UserData) => void;
   onNavigateToRegister: () => void;
 }
 
@@ -54,13 +67,15 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
       return;
     }
 
-    // Validar se é o usuário mock (Regina dos Santos)
-    if (cpf !== MOCK_USER.cpf) {
+    // Buscar usuário por CPF
+    const user = findUserByCPF(cpf);
+
+    if (!user) {
       setError("CPF não encontrado.");
       return;
     }
 
-    if (password !== MOCK_USER.password) {
+    if (password !== user.password) {
       setError("Senha incorreta.");
       return;
     }
@@ -69,7 +84,18 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
     // Simular login
     setTimeout(() => {
       setIsLoading(false);
-      onLogin();
+      onLogin({
+        id: user.id,
+        name: user.fullName,
+        fullName: user.fullName,
+        cpf: user.cpf,
+        age: user.age,
+        birthDate: user.birthDate,
+        gender: user.gender,
+        phone: user.phone,
+        email: user.email,
+        address: user.address,
+      });
     }, 1000);
   };
 
@@ -86,18 +112,18 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             </svg>
           </div>
           <div>
-            <h1>Bem Cuidar</h1>
+            <h1>Me Cuidar</h1>
             <p className="text-muted-foreground mt-2">
               Acesse sua conta para continuar
             </p>
           </div>
         </div>
 
-        {/* Credenciais de Teste */}
+        {/* Credenciais de Teste - Apenas Regina */}
         <Alert className="border-blue-500 bg-blue-50">
           <AlertCircle className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-blue-900">
-            <strong>Credenciais de teste:</strong>
+            <strong>Credenciais de teste (Regina dos Santos):</strong>
             <br />
             CPF: 123.456.789-00
             <br />

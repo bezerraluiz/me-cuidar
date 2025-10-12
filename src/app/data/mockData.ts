@@ -1,48 +1,229 @@
-// Dados mock baseados na persona Regina dos Santos
+// Sistema de dados mock com múltiplos usuários e relacionamentos
 
-export const MOCK_USER = {
-  cpf: "123.456.789-00",
-  password: "regina123",
-  fullName: "Regina dos Santos",
-  birthDate: "1975-01-15", // 50 anos
-  age: 50,
-  gender: "Feminino",
-  phone: "(81) 98765-4321",
-  email: "regina.santos@email.com",
+// Interface para tipos
+export interface User {
+  id: string;
+  cpf: string;
+  password: string;
+  fullName: string;
+  birthDate: string;
+  age: number;
+  gender: string;
+  phone: string;
+  email: string;
   address: {
-    street: "Rua das Flores",
-    number: "123",
-    complement: "Apt 201",
-    neighborhood: "Boa Viagem",
-    city: "Recife",
-    state: "PE",
-    zipCode: "51020-000",
+    street: string;
+    number: string;
+    complement: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  education: string;
+  occupation?: string;
+  workSchedule?: string;
+  familyRole?: string;
+  technicalSkills?: {
+    internet: number; // 1-10
+    smartphone: number; // 1-10
+    apps: number; // 1-10
+  };
+}
+
+export interface HealthContext {
+  userId: string;
+  lastMammogram: string | null;
+  physicalActivity: string;
+  lastRoutineCheckup: string;
+  conditions: Array<{
+    name: string;
+    medication: string;
+    diagnosedDate: string;
+  }>;
+  allergies: string[];
+  familyHistory: string[];
+  barriers?: string[];
+  fears?: string[];
+  motivations?: string[];
+  goals?: string[];
+  painPoints?: string[];
+  quotes?: string[];
+}
+
+// Banco de usuários mock
+export const MOCK_USERS: Record<string, User> = {
+  "user-1": {
+    id: "user-1",
+    cpf: "123.456.789-00",
+    password: "regina123",
+    fullName: "Regina dos Santos",
+    birthDate: "1975-01-15",
+    age: 50,
+    gender: "Feminino",
+    phone: "(81) 98765-4321",
+    email: "regina.santos@email.com",
+    address: {
+      street: "Rua das Flores",
+      number: "123",
+      complement: "Apt 201",
+      neighborhood: "Boa Viagem",
+      city: "Recife",
+      state: "PE",
+      zipCode: "51020-000",
+    },
+    education: "Ensino Médio Completo",
+    occupation: "Gerente de casa e cuidadora da família",
+    workSchedule: "8h-18h (dedicação à casa e família)",
+    familyRole: "Mãe, esposa e cuidadora principal da família",
+    technicalSkills: {
+      internet: 5, // Média - usa para necessidades básicas
+      smartphone: 6, // Razoável - usa principalmente WhatsApp
+      apps: 4, // Baixa - nunca baixou app de saúde antes
+    },
   },
-  education: "Ensino Médio Completo",
+  "user-2": {
+    id: "user-2",
+    cpf: "987.654.321-00",
+    password: "joao123",
+    fullName: "João Silva",
+    birthDate: "1980-05-20",
+    age: 45,
+    gender: "Masculino",
+    phone: "(81) 99876-5432",
+    email: "joao.silva@email.com",
+    address: {
+      street: "Av. Domingos Ferreira",
+      number: "456",
+      complement: "",
+      neighborhood: "Boa Viagem",
+      city: "Recife",
+      state: "PE",
+      zipCode: "51020-030",
+    },
+    education: "Superior Completo",
+  },
+  "user-3": {
+    id: "user-3",
+    cpf: "111.222.333-44",
+    password: "maria123",
+    fullName: "Maria Oliveira",
+    birthDate: "1990-08-10",
+    age: 35,
+    gender: "Feminino",
+    phone: "(81) 98888-7777",
+    email: "maria.oliveira@email.com",
+    address: {
+      street: "Rua do Futuro",
+      number: "789",
+      complement: "Casa",
+      neighborhood: "Graças",
+      city: "Recife",
+      state: "PE",
+      zipCode: "52050-010",
+    },
+    education: "Superior Completo",
+  },
 };
 
-// Contexto de Saúde da Regina
-export const MOCK_HEALTH_CONTEXT = {
-  // Nunca fez mamografia
-  lastMammogram: null,
-  // Sedentária
-  physicalActivity: "Sedentária",
-  // Última consulta de rotina há 3 anos
-  lastRoutineCheckup: "2022-10-15",
-  // Hipertensão leve (toma Losartana)
-  conditions: [
-    {
-      name: "Hipertensão Leve",
-      medication: "Losartana",
-      diagnosedDate: "2020-03-10",
-    },
-  ],
-  allergies: [],
-  familyHistory: [
-    "Hipertensão (mãe)",
-    "Diabetes tipo 2 (pai)",
-  ],
+// Função auxiliar para buscar usuário por CPF
+export const findUserByCPF = (cpf: string): User | undefined => {
+  return Object.values(MOCK_USERS).find(user => user.cpf === cpf);
 };
+
+// Função auxiliar para obter dados de saúde do usuário
+export const getHealthContextByUserId = (userId: string): HealthContext | undefined => {
+  return MOCK_HEALTH_CONTEXTS[userId];
+};
+
+// Mantém compatibilidade com código antigo
+export const MOCK_USER = MOCK_USERS["user-1"];
+
+// Contextos de Saúde por usuário
+export const MOCK_HEALTH_CONTEXTS: Record<string, HealthContext> = {
+  "user-1": {
+    userId: "user-1",
+    lastMammogram: null,
+    physicalActivity: "Sedentária",
+    lastRoutineCheckup: "2022-10-15",
+    conditions: [
+      {
+        name: "Hipertensão Leve",
+        medication: "Losartana",
+        diagnosedDate: "2020-03-10",
+      },
+    ],
+    allergies: [],
+    familyHistory: [
+      "Hipertensão (mãe)",
+      "Diabetes tipo 2 (pai)",
+    ],
+    barriers: [
+      "Falta de informação sobre exames preventivos",
+      "Medo do exame e do resultado",
+      "Falta de tempo - prioriza cuidar da família",
+      "Custo dos exames (algumas clínicas)",
+      "Dificuldade de agendar por telefone (linhas ocupadas)",
+    ],
+    fears: [
+      "Tenho medo de descobrir algo ruim sobre minha saúde",
+      "Minha família precisa de mim, não posso ficar doente",
+      "Tenho medo de fazer a mamografia - ouvi que dói",
+      "E se eu descobrir algo grave? Como vou contar para minha família?",
+    ],
+    motivations: [
+      "Estar presente para os filhos crescerem",
+      "Ver a filha se formar, casar e ter netos",
+      "Ser um exemplo de autocuidado para a filha",
+      "Ter saúde para aproveitar a vida com a família",
+    ],
+    goals: [
+      "Fazer os exames preventivos atrasados",
+      "Aprender a cuidar melhor da própria saúde",
+      "Ter lembretes automáticos para não esquecer dos exames",
+      "Conseguir agendar exames de forma fácil e rápida",
+      "Entender melhor sobre prevenção de doenças",
+    ],
+    painPoints: [
+      "Nunca tenho tempo de cuidar de mim",
+      "Agendar por ligação é um estresse - linhas sempre ocupadas",
+      "Não sei quais exames eu deveria fazer na minha idade",
+      "Tenho medo de fazer a mamografia - ouvi que é doloroso",
+      "Os custos de exames particulares pesam no orçamento",
+      "Fico ansiosa pensando em resultados de exames",
+    ],
+    quotes: [
+      "Eu sei que deveria fazer, mas sempre deixo para depois... Meu dia é tão corrido, quando vou ter tempo para isso?",
+      "Tenho tanto medo de descobrir algo ruim... Minha família precisa de mim, não posso ficar doente.",
+      "Agendar por ligação é um estresse! A linha da UBS vive ocupada.",
+    ],
+  },
+  "user-2": {
+    userId: "user-2",
+    lastMammogram: null,
+    physicalActivity: "Ativo",
+    lastRoutineCheckup: "2024-03-15",
+    conditions: [],
+    allergies: [],
+    familyHistory: [
+      "Câncer de próstata (pai)",
+    ],
+  },
+  "user-3": {
+    userId: "user-3",
+    lastMammogram: "2024-06-10",
+    physicalActivity: "Moderada",
+    lastRoutineCheckup: "2024-08-20",
+    conditions: [],
+    allergies: ["Penicilina"],
+    familyHistory: [
+      "Câncer de mama (avó)",
+    ],
+  },
+};
+
+// Mantém compatibilidade com código antigo
+export const MOCK_HEALTH_CONTEXT = MOCK_HEALTH_CONTEXTS["user-1"];
 
 // Exames preventivos da Regina (baseado no contexto de nunca ter feito mamografia)
 export const MOCK_EXAMS = [
@@ -200,7 +381,7 @@ export const MOCK_TRACKING_DATA = {
   totalExams: 3, // Apenas 3 exames nos últimos 3 anos
   recommendedExams: 6, // Deveria ter feito 6
   completionRate: 50, // Baixa adesão
-  upcomingExams: [], // Nenhum agendado ainda
+  upcomingExams: [] as Array<{ name: string; date: string }>, // Nenhum agendado ainda
 };
 
 export const MOCK_YEARLY_DATA = [

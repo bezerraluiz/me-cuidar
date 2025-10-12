@@ -7,13 +7,14 @@ import { MOCK_EXAMS } from "../../data/mockData";
 
 interface MyPreventiveHealthProps {
   onNavigate: (page: string, data?: { examType?: string }) => void;
+  userExams?: any[];
 }
 
-export function MyPreventiveHealth({ onNavigate }: MyPreventiveHealthProps) {
+export function MyPreventiveHealth({ onNavigate, userExams }: MyPreventiveHealthProps) {
   const [expandedExam, setExpandedExam] = useState<number | null>(null);
 
-  // Dados mock de exames preventivos (centralizados)
-  const exams = MOCK_EXAMS;
+  // Usa exames do usuário se disponível, senão usa MOCK_EXAMS
+  const exams = userExams || MOCK_EXAMS;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -57,7 +58,7 @@ export function MyPreventiveHealth({ onNavigate }: MyPreventiveHealthProps) {
   return (
     <div className="space-y-6 pb-20 md:pb-6">
       <div>
-        <h1>Meu Bem Cuidar</h1>
+        <h1>Meu Me Cuidar</h1>
         <p className="text-muted-foreground mt-2">
           Acompanhe todos os seus exames preventivos
         </p>

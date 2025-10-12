@@ -27,36 +27,46 @@ export function StepIndicator({ currentStep, totalSteps, stepLabels }: StepIndic
 
       {/* Labels dos passos (opcional) */}
       {stepLabels && (
-        <div className="hidden md:flex justify-between">
+        <div className="hidden md:flex justify-between gap-2">
           {stepLabels.map((label, index) => {
             const step = index + 1;
             const isCompleted = step < currentStep;
             const isCurrent = step === currentStep;
-            
+
             return (
               <div
                 key={step}
-                className={cn(
-                  "flex items-center gap-2 text-sm transition-colors",
-                  isCurrent && "text-primary",
-                  isCompleted && "text-success",
-                  !isCurrent && !isCompleted && "text-muted-foreground"
-                )}
+                className="flex flex-col items-center gap-2 flex-1"
               >
                 {isCompleted ? (
-                  <CheckCircle className="h-4 w-4" />
+                  <div
+                    className={cn(
+                      "flex h-8 w-8 items-center justify-center rounded-full bg-success text-white"
+                    )}
+                  >
+                    <CheckCircle className="h-5 w-5" />
+                  </div>
                 ) : (
                   <div
                     className={cn(
-                      "flex h-6 w-6 items-center justify-center rounded-full border-2",
-                      isCurrent && "border-primary bg-primary text-primary-foreground",
-                      !isCurrent && "border-muted-foreground"
+                      "flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-medium",
+                      isCurrent && "border-primary bg-primary text-white",
+                      !isCurrent && "border-muted-foreground text-muted-foreground bg-background"
                     )}
                   >
                     {step}
                   </div>
                 )}
-                <span className="hidden lg:inline">{label}</span>
+                <span
+                  className={cn(
+                    "text-xs text-center transition-colors",
+                    isCurrent && "text-primary font-medium",
+                    isCompleted && "text-success",
+                    !isCurrent && !isCompleted && "text-muted-foreground"
+                  )}
+                >
+                  {label}
+                </span>
               </div>
             );
           })}
