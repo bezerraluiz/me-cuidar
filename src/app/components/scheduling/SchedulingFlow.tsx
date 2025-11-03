@@ -27,11 +27,11 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState("");
   const [formData, setFormData] = useState({
-    name: "Maria Silva",
-    cpf: "123.456.789-00",
-    birthDate: "15/03/1975",
-    phone: "(11) 98765-4321",
-    email: "maria.silva@email.com",
+    name: "",
+    cpf: "",
+    birthDate: "",
+    phone: "",
+    email: "",
   });
 
   // Dados mock
@@ -358,6 +358,7 @@ export function SchedulingFlow({ onNavigate, initialExamType }: SchedulingFlowPr
 
           <Button
             className="cursor-pointer w-full h-12"
+            disabled={!formData.name || !formData.cpf || !formData.birthDate || !formData.phone || !formData.email}
             onClick={handleNext}
           >
             Continuar

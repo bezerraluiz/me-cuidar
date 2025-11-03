@@ -127,7 +127,7 @@ export function LoginPage({ onLogin, onNavigateToRegister }: LoginPageProps) {
             <br />
             CPF: 123.456.789-00
             <br />
-            Senha: regina123
+            Senha: senha123
           </AlertDescription>
         </Alert>
 
