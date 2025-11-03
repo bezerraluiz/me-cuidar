@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Calendar, Clock, MapPin, Plus, AlertCircle, TrendingUp } from "lucide-react";
+import { Calendar, Clock, MapPin, Plus, AlertCircle, TrendingUp, PhoneCall } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
@@ -23,6 +23,30 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   return (
     <div className="space-y-6 pb-20 md:pb-6">
+      {/* Botão Emergencial */}
+      <Card className="border-red-500 bg-red-50 dark:bg-red-950/30">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-500 animate-pulse">
+              <PhoneCall className="h-6 w-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-red-700 dark:text-red-400">Precisa de ajuda urgente?</h3>
+              <p className="text-sm text-red-600/80 dark:text-red-300/80">
+                Fale agora com um profissional de saúde
+              </p>
+            </div>
+          </div>
+          <Button
+            className="cursor-pointer w-full h-12 mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
+            onClick={() => onNavigate('emergency-chat')}
+          >
+            <PhoneCall className="h-5 w-5 mr-2" />
+            Chat Emergencial
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Alerta de Exames Pendentes */}
       {pendingAlerts > 0 && (
         <Card className="border-warning/20 bg-warning/5">

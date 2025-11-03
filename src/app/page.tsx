@@ -20,6 +20,7 @@ import { VirtualQueue } from "./components/queue/VirtualQueue";
 import { LoginPage } from "./components/auth/LoginPage";
 import { RegistrationFlow } from "./components/auth/RegistrationFlow";
 import { PersonalizedWelcome } from "./components/auth/PersonalizedWelcome";
+import { EmergencyChat } from "./components/emergency/EmergencyChat";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import { saveAuthData, getAuthData, clearAuthData } from "./utils/authStorage";
@@ -346,6 +347,8 @@ function Home() {
         return <CheckIn onCheckInComplete={() => handleNavigate("queue")} />;
       case "queue":
         return <VirtualQueue onCancel={() => handleNavigate("home")} />;
+      case "emergency-chat":
+        return <EmergencyChat onNavigate={handleNavigate} />;
       default:
         return <Dashboard onNavigate={handleNavigate} />;
     }
